@@ -1,7 +1,10 @@
 package azalius.katatennis;
 
 public class TennisGame1 implements TennisGame {
-
+	
+	private static final String[] scorePossible = {"Love", "Fifteen", "Thirty", "Forty"};
+	private static final String winMessage = "Win for ";
+	private static final String advantageMessage = "Advantage ";
 	private int scoreJoueur1 = 0;
 	private int scoreJoueur2 = 0;
 	private String player1Name;
@@ -13,54 +16,47 @@ public class TennisGame1 implements TennisGame {
 	}
 
 	public void wonPoint(String playerName) {
-		if (playerName.equals("player1") )
+		if (playerName.equals(player1Name) )
 			scoreJoueur1 += 1;
-		else
+		else if (playerName.equals(player2Name) )
 			scoreJoueur2 += 1;
 	}
 
 	public String getScore() {
-		String score = "";
-		int tempScore = 0;
-		
+		String score;		
 		if (isTie()) {
 			score = resultWhenTie();
 		} else if (aPlayerHasAvantageOrWin()) {
 			score = resultWhenAdvantageOrWin();
 		} else {
-			for (int i = 1; i <= 2; i++) {
-				score = getWrittenValueFromScore(scoreJoueur1);
-				score += "-";
-				score += getWrittenValueFromScore(scoreJoueur2);
-			}
+			score = getScoreStandard();
 		}
 		return score;
 	}
 
-	private String getWrittenValueFromScore(int tempScore) {
-		switch (tempScore) {
-		case 0:
-			return "Love";
-		case 1:
-			return "Fifteen";
-		case 2:
-			return "Thirty";
-		default:
-			return "Forty";
-		}
+	private String getScoreStandard() {
+		String score;
+		score = getWrittenValueFromScore(scoreJoueur1);
+		score += "-";
+		score += getWrittenValueFromScore(scoreJoueur2);
+		return score;
+	}
+
+	private String getWrittenValueFromScore(int score) {
+		return scorePossible[score];
 	}
 
 	private String resultWhenAdvantageOrWin() {
 		String score;
 		int minusResult = scoreJoueur1 - scoreJoueur2;
 		if (minusResult == 1)
-			score = "Advantage player1";
+			score = advantageMessage+ this.player1Name;
 		else if (minusResult == -1)
-			score = "Advantage player2";
+			score = advantageMessage+ this.player2Name;
 		else if (minusResult >= 2)
-			score = "Win for player1";
+			score = winMessage + this.player1Name;
 		else
-			score = "Win for player2";
+			score = winMessage+ this.player2Name;
 		return score;
 	}
 
